@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Product App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../../static/css/bootstrap3.css" rel="stylesheet">
+
+	  <script src="../../static/js/jquery.js"></script>
+	  <script src="../../static/js/jquery-ui.js"></script>
+	  <script src="../../static/js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+
+</head>
+
+<body>
+    <div class="nav-bar">
+
+    </div>
+    <div id="app">
+      <div class="cart">
+            <img src="assets/chariot.jpeg" alt="Panier"  >  <span class="btn btn-warning"   > <A href="#" @click.stop="show_cart=!show_cart"> Voir mon panier </A> </span>
+            <ul> 
+              <li v-show="show_cart"  v-for="elem in cart"> {{ elem }}</li>
+            </ul>
+            <button v-on:click="counter += 1">counter 1</button>  {{ counter}}
+      </div>
+
+
+      <product-item :article="product[0]"> </product-item>
+      <product-item :article="product[1]"> </product-item>
+
+    </div>
+
+
+<template id="prod_template">
+
+  <div class="product">
+      <div class="product-image">
+          <img v-if="image" :src="image" alt=""     width="50%" height="50%" >
+          <img v-else  :src="article.image" alt=""  width="50%" height="50%" >
+      </div>
+      <div class="product-info">
+          <A href="#" @click.stop="article.selectedArt=!article.selectedArt"> <h1>{{ article.name }}[<span v-show="article.selectedArt" class="btn btn-warning btn-xs" :class="{ 	'btn btn-success' : selectedArt == article.selectedArt } " > X </span> ] </h1></A>
+
+          <p> {{ article.description }} </p>
+          <p v-if="article.inventory > 10">In Stock</p>
+          <p v-else-if="article.inventory <= 10 && article.inventory > 0">Almost sold out!</p>
+          <p v-else>Out of Stock</p>
+          <ul>
+              <li v-for="detail in article.details">
+                  {{ detail }}
+              </li>
+          </ul>
+          <div v-for="variant in article.variants"
+              :key="variant.variantId"
+              class="color-box"
+              :style="{ backgroundColor: variant.variantColor }"
+              @mouseover="emitUpdateProduct(variant.variantImage)">
+          </div>
+          <p v-show="article.inStock"> InStock</p>
+
+          <button @click="emitAddToCart(article.id)" >Add to Cart</button>
+          <button @click="emitDelToCart" :disabled="article.cart == 0" :class="{ disabledButton: article.cart == 0 }" >Delete to Cart</button>
+
+      </div>
+
+  </div>
+</template>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
